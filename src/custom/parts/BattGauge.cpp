@@ -16,7 +16,7 @@ void BattGauge::init(){
 }
 
 void BattGauge::update(){
-    Serial.println("Batt");
+    // Serial.println("Batt");
     if(!this->_setup->isAvailableEPD()) return;
     if(!this->isReadyToUpdate()) return;
 

@@ -10,21 +10,21 @@ DigitalClock::DigitalClock(uint16_t x, uint16_t y, CustomSetups* setup, Priority
 }
 
 void DigitalClock::update(){
-    Serial.println("Digit");
+    // Serial.println("Digit");
     if(!this->_setup->isAvailableEPD()) return;
     if(!this->isReadyToUpdate()) return;
 
-    Serial.println("Digit1");
+    // Serial.println("Digit1");
     this->updateWithoutRender();
 
-    Serial.println("Digit2");
+    // Serial.println("Digit2");
     RTEPD_API::canvasDraw(this->_canvas_hash, this->_x, this->_y, UPDATE_MODE_DU4);
 
-    Serial.println("Digit3");
+    // Serial.println("Digit3");
     this->_show_Separation = !this->_show_Separation;
-    Serial.println("Digit4");
+    // Serial.println("Digit4");
     this->setLastUpdate();
-    Serial.println("Digit5");
+    // Serial.println("Digit5");
 }
 
 void DigitalClock::updateWithoutRender(){

@@ -8,7 +8,7 @@ HeapGauge::HeapGauge(uint16_t x, uint16_t y, CustomSetups* setup): Parts(x, y, s
 }
 
 void HeapGauge::update(){
-    Serial.println("Heap");
+    // Serial.println("Heap");
     if(!this->_setup->isAvailableEPD()) return;
     if(!this->isReadyToUpdate()) return;
 

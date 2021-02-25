@@ -6,7 +6,7 @@ void Instructions::renderRect(InstructionParams::RenderRect* params){
     Parts::createHash(Hash, RTEPD_SIZE_HASH);
     RTEPD_API::canvasRegister(Hash, params->w, params->h);
     RTEPD_API::canvasDrawRect(Hash, params->x, params->y + POS_APP_AREA_Y, 0, 0, params->w, params->h, params->data, UPDATE_MODE_DU4);
-    RTEPD_API::canvasErase("");
+    RTEPD_API::canvasErase(Hash);
 }
 
 void Instructions::renderFillRect(InstructionParams::RenderFillRect* params){
@@ -15,7 +15,7 @@ void Instructions::renderFillRect(InstructionParams::RenderFillRect* params){
     Parts::createHash(Hash, RTEPD_SIZE_HASH);
     RTEPD_API::canvasRegister(Hash, params->w, params->h);
     RTEPD_API::canvasDrawFillRect(Hash, params->x, params->y + POS_APP_AREA_Y, 0, 0, params->w, params->h, params->data, UPDATE_MODE_DU4);
-    RTEPD_API::canvasErase("");
+    RTEPD_API::canvasErase(Hash);
     delay(10);
 }
 

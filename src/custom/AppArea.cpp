@@ -28,39 +28,39 @@ void AppArea::launchApp(const uint8_t* appCode){
     this->_info_main_proccess->index_instruction = 0;
 
     while(true){
-        Serial.println("1");
+        // Serial.println("1");
         Parts::updates(this->_parts_status_bar);
         uint8_t Code_Exception;
 
-        Serial.println("a");
+        // Serial.println("a");
 
         if(this->_info_main_proccess->flag_buildin){
-            Serial.println("b");
+            // Serial.println("b");
             if(this->_info_main_proccess == nullptr){
                 this->showLaunchFailed();
                 return;
             }
             
-            Serial.println("c");
+            // Serial.println("c");
             if(this->_info_main_proccess->index_instruction >= this->_info_main_proccess->instructions.size()){
                 this->showException(255);
                 return;
             }
 
-            Serial.println("d"); 
+            // Serial.println("d"); 
             Code_Exception = processor(&this->_info_main_proccess->instructions[this->_info_main_proccess->index_instruction], &(this->_info_main_proccess->index_instruction));
 
-            Serial.println("e");
+            // Serial.println("e");
             if(Code_Exception != 0){
                 this->showException(Code_Exception);
                 return;
             }
-            Serial.println("f");
+            // Serial.println("f");
         }else{
-            Serial.println("g");
+            // Serial.println("g");
             return;
         }
-        Serial.println("h");
+        // Serial.println("h");
     }
 }
 
