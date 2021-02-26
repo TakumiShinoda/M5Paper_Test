@@ -28,39 +28,29 @@ void AppArea::launchApp(const uint8_t* appCode){
     this->_info_main_proccess->index_instruction = 0;
 
     while(true){
-        // Serial.println("1");
         Parts::updates(this->_parts_status_bar);
         uint8_t Code_Exception;
 
-        // Serial.println("a");
-
         if(this->_info_main_proccess->flag_buildin){
-            // Serial.println("b");
             if(this->_info_main_proccess == nullptr){
                 this->showLaunchFailed();
                 return;
             }
             
-            // Serial.println("c");
             if(this->_info_main_proccess->index_instruction >= this->_info_main_proccess->instructions.size()){
                 this->showException(255);
                 return;
             }
 
-            // Serial.println("d"); 
             Code_Exception = processor(&this->_info_main_proccess->instructions[this->_info_main_proccess->index_instruction], &(this->_info_main_proccess->index_instruction));
 
-            // Serial.println("e");
             if(Code_Exception != 0){
                 this->showException(Code_Exception);
                 return;
             }
-            // Serial.println("f");
         }else{
-            // Serial.println("g");
             return;
         }
-        // Serial.println("h");
     }
 }
 
@@ -88,30 +78,17 @@ uint8_t AppArea::processor(Instruction* instruction, uint32_t* index_instruction
         &Flag_Jumped
     };
 
-    Serial.println("A");
-
     if(instruction->code == InstructionCode::RENDER_RECT){
-        Serial.println("B");
         Instructions::renderRect((InstructionParams::RenderRect*)instruction->args);
-        Serial.println("B1");
     }else if(instruction->code == InstructionCode::RENDER_FILL_RECT){
-        Serial.println("C");
         Instructions::renderFillRect((InstructionParams::RenderFillRect*)instruction->args);
-        Serial.println("C1");
     }else if(instruction->code == InstructionCode::JUMP){
-        Serial.println("D");
         Instructions::jump((InstructionParams::Jump*)instruction->args, &Outputs);
-        Serial.println("D1");
     }else{
-        Serial.println("F");
         return 1;
     }
 
-    Serial.println("G");
-
     if(!Flag_Jumped) *(index_instruction) += 1;
-
-    Serial.println("H");
     
     return 0;
 }
