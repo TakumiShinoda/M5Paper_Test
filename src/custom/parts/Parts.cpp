@@ -47,12 +47,9 @@ void Parts::debugPrint(String mes){
 
 void Parts::updates(std::vector<Parts*> parts){
     for(uint32_t i = 0; i < parts.size(); i++){
-        // Serial.println("1A");
         if(parts[i] == nullptr) continue;
-        // Serial.println("1B");
 
         parts[i]->update();
-        // Serial.println("1C");
     }
 }
 

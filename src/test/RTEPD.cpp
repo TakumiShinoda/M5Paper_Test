@@ -80,7 +80,6 @@ void RTEPD::renderProcess(void* params){
 
 M5EPD_Canvas* RTEPD::getCanvas(char* hash){
     for(uint32_t i = 0; i < CanvasRegistry.size(); i++){
-        // Serial.printf("GetC: %u\n", i);
         if(strcmp(CanvasRegistry[i].hash, hash) != 0) continue;
 
         return CanvasRegistry[i].canvas;
@@ -125,7 +124,6 @@ void _RTEPD_PROCESS::canvasErase(RenderProc* proc){
         if(strcmp(CanvasRegistry[i].hash, proc->canvasParams.hash) == 0){
             delete CanvasRegistry[i].hash;
             delete CanvasRegistry[i].canvas;
-            Serial.println("Erase");
             CanvasRegistry.erase(CanvasRegistry.begin() + i);
             CanvasRegistry.shrink_to_fit();
         }
@@ -159,11 +157,8 @@ void _RTEPD_PROCESS::canvasDrawFill(RenderProc* proc){
 M5EPD_Canvas* _RTEPD_PROCESS::canvasSetRect(RenderProc* proc){
     M5EPD_Canvas* Canvas;
 
-    //Serial.printf("Hash: %s\n", proc->canvasParams.hash);
-
     if(proc->canvasParams.hash == nullptr) return nullptr;
 
-    //Serial.printf("Getting\n");
     Canvas = RTEPD::getCanvas(proc->canvasParams.hash);
 
     if(Canvas == nullptr) return nullptr;
@@ -187,32 +182,23 @@ void _RTEPD_PROCESS::canvasDrawRect(RenderProc* proc){
 M5EPD_Canvas* _RTEPD_PROCESS::canvasSetFillRect(RenderProc* proc){
      M5EPD_Canvas* Canvas;
 
-    // Serial.println("SFill1");
     if(proc->canvasParams.hash == nullptr) return nullptr;
 
-    // Serial.println("SFill2");
     Canvas = RTEPD::getCanvas(proc->canvasParams.hash);
 
-    // Serial.println("SFill3");
     if(Canvas == nullptr) return nullptr;
 
-    // Serial.println("SFill4");
     Canvas->fillRect(proc->canvasParams.innerPos.x, proc->canvasParams.innerPos.y, proc->size.w, proc->size.h, proc->canvasParams.color);
 
-    // Serial.println("SFill5");
     return Canvas;
 }
 
 void _RTEPD_PROCESS::canvasDrawFillRect(RenderProc* proc){
-    // Serial.println("Fill1");
     M5EPD_Canvas* Canvas = _RTEPD_PROCESS::canvasSetFillRect(proc);
 
-    // Serial.println("Fill2");
     if(Canvas == nullptr) return;
 
-    // Serial.println("Fill3");
     Canvas->pushCanvas(proc->pos.x, proc->pos.y, proc->updateMode);
-    // Serial.println("Fill4");
 }
 
 M5EPD_Canvas* _RTEPD_PROCESS::canvasSetText(RenderProc* proc){

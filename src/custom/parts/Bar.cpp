@@ -10,7 +10,6 @@ Bar::Bar(uint16_t x, uint16_t y, CustomSetups *setup, PriorityNum priority) : Pa
 }
 
 void Bar::update(){
-    // Serial.println("Bar");
     if(!this->_setup->isAvailableEPD()) return;
     if(this->_flag_rendered) return;
 
