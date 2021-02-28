@@ -27,9 +27,65 @@ void AppArea::launchApp(const uint8_t* appCode){
 
     this->_info_main_proccess->index_instruction = 0;
 
+    bool NowTouch = false;
+    tp_finger_t NowTouchFinger;
+    Vector2 Pos_SwipeStart = {0, 0};
+    bool WasTouch = false;
+    bool OnTouch = false;
+    bool Released = false;
+    bool IsSwiping = false;
+    bool IsSwiped = false;
+
     while(true){
         Parts::updates(this->_parts_status_bar);
         uint8_t Code_Exception;
+
+        NowTouch = RTTP::IsTouch;
+        NowTouchFinger = RTTP::Fingers[0];
+
+        if(NowTouch && !WasTouch){
+            OnTouch = true;
+        }else{
+            OnTouch = false;
+        }
+        
+        if(!NowTouch && WasTouch){
+            Released = true;
+        }else{
+            Released = false;
+        }
+
+        WasTouch = NowTouch;
+
+        if(OnTouch){
+            Pos_SwipeStart.x = NowTouchFinger.x;
+            Pos_SwipeStart.y = NowTouchFinger.y;
+            IsSwiping = true;
+            Serial.println("OnTouch");
+        }else if(Released){
+            Serial.println("Released");
+        }
+
+        if(!IsSwiping) continue;
+
+        Serial.printf("%d\n", abs(NowTouchFinger.y - Pos_SwipeStart.y));
+
+        if(abs(NowTouchFinger.y - Pos_SwipeStart.y) > 100 && Released){
+            IsSwiped = true;
+            IsSwiping = false;
+        }else{
+            IsSwiped = false;
+        }
+
+        if(IsSwiped) Serial.println("Swiped");
+
+        if(
+            IsSwiped &&
+            (Pos_SwipeStart.x >= 0) && (Pos_SwipeStart.x <= 180) &&
+            (Pos_SwipeStart.y >= 940 - 50) && (Pos_SwipeStart.y <= 940)
+        ){
+            break;
+        }
 
         if(this->_info_main_proccess->flag_buildin){
             if(this->_info_main_proccess == nullptr){
@@ -52,6 +108,8 @@ void AppArea::launchApp(const uint8_t* appCode){
             return;
         }
     }
+
+    RTEPD_API::drawFillRect(0, POS_APP_AREA_Y, 540, 960 - POS_APP_AREA_Y, 0xFFFF, UPDATE_MODE_GC16);
 }
 
 void AppArea::showLaunchFailed(){
@@ -60,6 +118,7 @@ void AppArea::showLaunchFailed(){
     delay(2000);
     RTEPD_API::canvasDrawFill("0123465789", 0, 0, 0x0000, UPDATE_MODE_A2);
 }
+
 void AppArea::showException(uint8_t code){
     char Mes[21] = "";
 

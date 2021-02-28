@@ -30,7 +30,7 @@ void RTEPD::renderProcess(void* params){
 
         if(Status_Receive != pdPASS) continue;
 
-        Serial.printf("Recieve: %u\n", proc->code);
+        // Serial.printf("Recieve: %u\n", proc->code);
 
         if(proc->code == RenderCode::DRAW_FILL_RECT){
             M5.EPD.FillPartGram4bpp(proc->pos.x, proc->pos.y, proc->size.w, proc->size.h, proc->fill_data);

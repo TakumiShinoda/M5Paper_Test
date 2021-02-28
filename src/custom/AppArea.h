@@ -4,6 +4,7 @@
 #include "./setups.h"
 #include "./parts/Parts.h"
 #include "./Instructions.h"
+#include "../test/RTTP.h"
 
 #define POS_APP_AREA_Y 53
 

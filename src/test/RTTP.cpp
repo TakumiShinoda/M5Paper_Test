@@ -11,7 +11,7 @@ void touchProcess(void* params){
         RTTP::_touchProcess();
         xSemaphoreGive(Mutexes::i2c);
 
-        vTaskDelay(10);
+        // vTaskDelay(10);
     }
 }
 
