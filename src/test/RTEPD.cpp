@@ -3,6 +3,7 @@
 namespace _RTEPD_PROCESS{
     void canvasRegister(RenderProc*);
     void canvasErase(RenderProc*);
+    void canvasIgnore(RenderProc*);
     M5EPD_Canvas* canvasSetFill(RenderProc*);
     void canvasDrawFill(RenderProc*);
     M5EPD_Canvas* canvasSetRect(RenderProc*);
@@ -18,7 +19,7 @@ namespace _RTEPD_PROCESS{
     void canvasDraw(RenderProc*);
 }
 
-QueueHandle_t RTEPD::Que_RenderProcess = xQueueCreate(20, sizeof(RenderProc*));
+QueueHandle_t RTEPD::Que_RenderProcess = xQueueCreate(100, sizeof(RenderProc*));
 static std::vector<HashedCanvas> CanvasRegistry;
 
 void RTEPD::renderProcess(void* params){
@@ -78,19 +79,29 @@ void RTEPD::renderProcess(void* params){
     }
 }
 
-M5EPD_Canvas* RTEPD::getCanvas(char* hash){
+HashedCanvas* RTEPD::getHashedCanvas(char* hash){
     for(uint32_t i = 0; i < CanvasRegistry.size(); i++){
         if(strcmp(CanvasRegistry[i].hash, hash) != 0) continue;
 
-        return CanvasRegistry[i].canvas;
+        return &CanvasRegistry[i];
     }
 
     return nullptr;
 }
 
+M5EPD_Canvas* RTEPD::getCanvas(char* hash, bool isBlockIgnore = true){
+    HashedCanvas* HashedCanvas = RTEPD::getHashedCanvas(hash);
+
+    if(HashedCanvas == nullptr) return nullptr;
+    if(HashedCanvas->isIgnore == true && isBlockIgnore) return nullptr;
+
+    return HashedCanvas->canvas;
+}
+
 void _RTEPD_PROCESS::canvasRegister(RenderProc* proc){
     M5EPD_Canvas* NewCanvas;
     char* NewHash;
+    HashedCanvas NewHashedCanvas;
     uint32_t LoopCnt_HashCheck;
     uint32_t Size_CanvasRegister = CanvasRegistry.size();
 
@@ -112,7 +123,9 @@ void _RTEPD_PROCESS::canvasRegister(RenderProc* proc){
     if(NewCanvas == nullptr || NewHash == nullptr) RTEPD_ERR_MES();
 
     NewCanvas->createCanvas(proc->size.w, proc->size.h);
-    CanvasRegistry.push_back((HashedCanvas){NewHash, NewCanvas});
+    NewHashedCanvas.hash = NewHash;
+    NewHashedCanvas.canvas = NewCanvas;
+    CanvasRegistry.push_back(NewHashedCanvas);
 }
 
 void _RTEPD_PROCESS::canvasErase(RenderProc* proc){
@@ -128,6 +141,18 @@ void _RTEPD_PROCESS::canvasErase(RenderProc* proc){
             CanvasRegistry.shrink_to_fit();
         }
     }
+}
+
+void _RTEPD_PROCESS::canvasIgnore(RenderProc* proc){
+    HashedCanvas* HashedCanvas;
+
+    if(proc->canvasParams.hash == nullptr) return;
+
+    HashedCanvas = RTEPD::getHashedCanvas(proc->canvasParams.hash);
+
+    if(HashedCanvas == nullptr) return;
+
+    HashedCanvas->isIgnore = true;
 }
 
 M5EPD_Canvas* _RTEPD_PROCESS::canvasSetFill(RenderProc* proc){

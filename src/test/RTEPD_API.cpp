@@ -68,6 +68,20 @@ RenderProc* RTEPD_API::canvasErase(const char* hash){
     return Proc;
 }
 
+RenderProc* RTEPD_API::canvasIgnore(const char* hash){
+    RenderProc* Proc = new RenderProc;
+    char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
+
+    strcpy(Hash, hash);
+    Proc->code = RenderCode::CANVAS_IGNORE;
+
+    Proc->canvasParams.hash = Hash;
+
+    RTEPD_API::addToQue(Proc);
+
+    return Proc;
+}
+
 RenderProc* RTEPD_API::canvasSetFill(const char* hash, uint16_t color){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));

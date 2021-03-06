@@ -24,6 +24,7 @@ enum class RenderCode{
     DRAW_AREA,
     CANVAS_REGISTER,
     CANVAS_ERASE,
+    CANVAS_IGNORE,
     CANVAS_SET_FILL,
     CANVAS_DRAW_FILL,
     CANVAS_SET_RECT,
@@ -74,13 +75,15 @@ typedef struct _RenderProc{
 typedef struct _HashedCanvas{
     char* hash;
     M5EPD_Canvas* canvas;
+    bool isIgnore = false;
 } HashedCanvas;
 
 namespace RTEPD{
     extern QueueHandle_t Que_RenderProcess;
 
     void renderProcess(void*);
-    M5EPD_Canvas* getCanvas(char*);
+    HashedCanvas* getHashedCanvas(char*);
+    M5EPD_Canvas* getCanvas(char*, bool);
 }
 
 namespace RTEPD_API{
@@ -90,6 +93,7 @@ namespace RTEPD_API{
 
     RenderProc* canvasRegister(const char*, uint16_t, uint16_t);
     RenderProc* canvasErase(const char*);
+    RenderProc* canvasIgnore(const char*);
     RenderProc* canvasSetFill(const char*, uint16_t);
     RenderProc* canvasDrawFill(const char*, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t);
     RenderProc* canvasSetRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);

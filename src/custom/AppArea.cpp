@@ -66,25 +66,36 @@ void AppArea::launchApp(const uint8_t* appCode){
             Serial.println("Released");
         }
 
-        if(!IsSwiping) continue;
+        if(IsSwiping){
+            Serial.printf("%d\n", abs(NowTouchFinger.y - Pos_SwipeStart.y));
 
-        Serial.printf("%d\n", abs(NowTouchFinger.y - Pos_SwipeStart.y));
+            if(abs(NowTouchFinger.y - Pos_SwipeStart.y) > 100 && Released){
+                IsSwiped = true;
+                IsSwiping = false;
+            }else{
+                IsSwiped = false;
+            }
 
-        if(abs(NowTouchFinger.y - Pos_SwipeStart.y) > 100 && Released){
-            IsSwiped = true;
-            IsSwiping = false;
-        }else{
-            IsSwiped = false;
-        }
+            if(
+                IsSwiped &&
+                (Pos_SwipeStart.x >= 0) && (Pos_SwipeStart.x <= 180) &&
+                (Pos_SwipeStart.y >= 940 - 50) && (Pos_SwipeStart.y <= 940)
+            ){
+                Serial.println("Swiped");
+                while(true){
+                    RenderProc* Retp;
+                    BaseType_t Result;
+                    
+                    Result = xQueueReceive(RTEPD::Que_RenderProcess, &Retp, 10 / portTICK_PERIOD_MS);
+                    
+                    if(uxQueueMessagesWaiting(RTEPD::Que_RenderProcess) == 0) break;
+                    if(Retp == nullptr) continue;
 
-        if(IsSwiped) Serial.println("Swiped");
-
-        if(
-            IsSwiped &&
-            (Pos_SwipeStart.x >= 0) && (Pos_SwipeStart.x <= 180) &&
-            (Pos_SwipeStart.y >= 940 - 50) && (Pos_SwipeStart.y <= 940)
-        ){
-            break;
+                    delete Retp;
+                }
+                
+                break;
+            }
         }
 
         if(this->_info_main_proccess->flag_buildin){
