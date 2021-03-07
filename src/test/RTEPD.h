@@ -87,28 +87,28 @@ namespace RTEPD{
 }
 
 namespace RTEPD_API{
-    RenderProc* drawFillRect(uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t);
-    RenderProc* drawRawImage(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t);
-    RenderProc* drawArea(uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t);
+    RenderProc* drawFillRect(uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* drawRawImage(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* drawArea(uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
 
-    RenderProc* canvasRegister(const char*, uint16_t, uint16_t);
-    RenderProc* canvasErase(const char*);
-    RenderProc* canvasIgnore(const char*);
-    RenderProc* canvasSetFill(const char*, uint16_t);
-    RenderProc* canvasDrawFill(const char*, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t);
-    RenderProc* canvasSetRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);
-    RenderProc* canvasDrawRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t);
-    RenderProc* canvasSetFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);
-    RenderProc* canvasDrawFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t);
-    RenderProc* canvasSetText(const char*, uint16_t, uint16_t, uint8_t, char*);
-    RenderProc* canvasDrawText(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, char*, m5epd_update_mode_t);
-    RenderProc* canvasSetReverse(const char*);
-    RenderProc* canvasDrawReverse(const char*, uint16_t, uint16_t, m5epd_update_mode_t);
-    RenderProc* canvasSetRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*);
-    RenderProc* canvasDrawRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t);
-    RenderProc* canvasDraw(const char*, uint16_t, uint16_t, m5epd_update_mode_t);
+    RenderProc* canvasRegister(const char*, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasErase(const char*, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasIgnore(const char*, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasSetFill(const char*, uint16_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasDrawFill(const char*, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasSetRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasDrawRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasSetFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasDrawFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasSetText(const char*, uint16_t, uint16_t, uint8_t, char*, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasDrawText(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, char*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasSetReverse(const char*, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasDrawReverse(const char*, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasSetRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasDrawRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasDraw(const char*, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
 
-    void addToQue(RenderProc*);
+    bool addToQue(RenderProc**, TickType_t);
     void gabageCollectionProccess(void* params);
 
     static std::vector<RenderProc*> gabageCollection;

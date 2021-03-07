@@ -19,7 +19,7 @@ namespace _RTEPD_PROCESS{
     void canvasDraw(RenderProc*);
 }
 
-QueueHandle_t RTEPD::Que_RenderProcess = xQueueCreate(100, sizeof(RenderProc*));
+QueueHandle_t RTEPD::Que_RenderProcess = xQueueCreate(50, sizeof(RenderProc*));
 static std::vector<HashedCanvas> CanvasRegistry;
 
 void RTEPD::renderProcess(void* params){
