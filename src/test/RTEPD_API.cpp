@@ -1,6 +1,6 @@
 #include "./RTEPD.h"
 
-RenderProc* RTEPD_API::drawFillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::drawFillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
 
     Proc->code = RenderCode::DRAW_FILL_RECT;
@@ -9,12 +9,10 @@ RenderProc* RTEPD_API::drawFillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t
     Proc->fill_data = color;
     Proc->updateMode = mode;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::drawRawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t* img, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::drawRawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t* img, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
 
     Proc->code = RenderCode::DRAW_RAW_IMAGE;
@@ -23,12 +21,10 @@ RenderProc* RTEPD_API::drawRawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t
     Proc->img = img;
     Proc->updateMode = mode;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+   RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::drawArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::drawArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
 
     Proc->code = RenderCode::DRAW_AREA;
@@ -36,12 +32,10 @@ RenderProc* RTEPD_API::drawArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, 
     Proc->size = {w, h};
     Proc->updateMode = mode;
     
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasRegister(const char* hash, uint16_t w, uint16_t h, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasRegister(const char* hash, uint16_t w, uint16_t h, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -50,12 +44,10 @@ RenderProc* RTEPD_API::canvasRegister(const char* hash, uint16_t w, uint16_t h, 
     Proc->canvasParams.hash = Hash;
     Proc->size = {w, h};
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasErase(const char* hash, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasErase(const char* hash, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -63,12 +55,10 @@ RenderProc* RTEPD_API::canvasErase(const char* hash, TickType_t waitTick){
     Proc->code = RenderCode::CANVAS_ERASE;
     Proc->canvasParams.hash = Hash;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasIgnore(const char* hash, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasIgnore(const char* hash, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -77,12 +67,10 @@ RenderProc* RTEPD_API::canvasIgnore(const char* hash, TickType_t waitTick){
 
     Proc->canvasParams.hash = Hash;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasSetFill(const char* hash, uint16_t color, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasSetFill(const char* hash, uint16_t color, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -91,12 +79,10 @@ RenderProc* RTEPD_API::canvasSetFill(const char* hash, uint16_t color, TickType_
     Proc->canvasParams.hash = Hash;
     Proc->canvasParams.color = color;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasDrawFill(const char* hash, uint16_t x, uint16_t y, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasDrawFill(const char* hash, uint16_t x, uint16_t y, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -107,12 +93,10 @@ RenderProc* RTEPD_API::canvasDrawFill(const char* hash, uint16_t x, uint16_t y, 
     Proc->canvasParams.color = color;
     Proc->updateMode = mode;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasSetRect(const char* hash, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasSetRect(const char* hash, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -123,12 +107,10 @@ RenderProc* RTEPD_API::canvasSetRect(const char* hash, uint16_t in_x, uint16_t i
     Proc->size = {w, h};
     Proc->canvasParams.color = color;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasDrawRect(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasDrawRect(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -141,12 +123,10 @@ RenderProc* RTEPD_API::canvasDrawRect(const char* hash, uint16_t x, uint16_t y, 
     Proc->updateMode = mode;
     Proc->canvasParams.color = color;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;    
+    RTEPD_API_RETURN_PROC();    
 }
 
-RenderProc* RTEPD_API::canvasSetFillRect(const char* hash, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasSetFillRect(const char* hash, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -157,12 +137,10 @@ RenderProc* RTEPD_API::canvasSetFillRect(const char* hash, uint16_t in_x, uint16
     Proc->size = {w, h};
     Proc->canvasParams.color = color;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+   RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasDrawFillRect(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasDrawFillRect(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint16_t color, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -174,12 +152,10 @@ RenderProc* RTEPD_API::canvasDrawFillRect(const char* hash, uint16_t x, uint16_t
     Proc->size = {w, h};
     Proc->canvasParams.color = color;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasSetText(const char* hash, uint16_t in_x, uint16_t in_y, uint8_t textSize, char* text, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasSetText(const char* hash, uint16_t in_x, uint16_t in_y, uint8_t textSize, char* text, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -190,12 +166,10 @@ RenderProc* RTEPD_API::canvasSetText(const char* hash, uint16_t in_x, uint16_t i
     Proc->canvasParams.textSize = textSize;
     Proc->canvasParams.text = text;
     
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasDrawText(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint8_t textSize, char* text, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasDrawText(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint8_t textSize, char* text, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -208,12 +182,10 @@ RenderProc* RTEPD_API::canvasDrawText(const char* hash, uint16_t x, uint16_t y, 
     Proc->canvasParams.text = text;
     Proc->updateMode = mode;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasSetReverse(const char* hash, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasSetReverse(const char* hash, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -221,12 +193,10 @@ RenderProc* RTEPD_API::canvasSetReverse(const char* hash, TickType_t waitTick){
     Proc->code = RenderCode::CANVAS_SET_REVERSE;
     Proc->canvasParams.hash = Hash;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasDrawReverse(const char* hash, uint16_t x, uint16_t y, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasDrawReverse(const char* hash, uint16_t x, uint16_t y, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -236,12 +206,10 @@ RenderProc* RTEPD_API::canvasDrawReverse(const char* hash, uint16_t x, uint16_t 
     Proc->pos = {x, y};
     Proc->updateMode = mode;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasSetRawImage(const char* hash, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint8_t* img, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasSetRawImage(const char* hash, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint8_t* img, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -252,12 +220,10 @@ RenderProc* RTEPD_API::canvasSetRawImage(const char* hash, uint16_t in_x, uint16
     Proc->size = {w, h};
     Proc->img = img;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasDrawRawImage(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint8_t* img, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasDrawRawImage(const char* hash, uint16_t x, uint16_t y, uint16_t in_x, uint16_t in_y, uint16_t w, uint16_t h, uint8_t* img, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -270,12 +236,10 @@ RenderProc* RTEPD_API::canvasDrawRawImage(const char* hash, uint16_t x, uint16_t
     Proc->img = img;
     Proc->updateMode = mode;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
-RenderProc* RTEPD_API::canvasDraw(const char* hash, uint16_t x, uint16_t y, m5epd_update_mode_t mode, TickType_t waitTick){
+RenderProc* RTEPD_API::canvasDraw(const char* hash, uint16_t x, uint16_t y, m5epd_update_mode_t mode, TickType_t waitTick, bool procAutoRelease){
     RenderProc* Proc = new RenderProc;
     char* Hash = (char*)malloc(sizeof(char) + strlen(hash));
 
@@ -285,14 +249,13 @@ RenderProc* RTEPD_API::canvasDraw(const char* hash, uint16_t x, uint16_t y, m5ep
     Proc->pos = {x, y};
     Proc->updateMode = mode;
 
-    RTEPD_API::addToQue(&Proc, waitTick);
-
-    return Proc;
+    RTEPD_API_RETURN_PROC();
 }
 
 bool RTEPD_API::addToQue(RenderProc** proc, TickType_t waitTick){
     BaseType_t Result = xQueueSend(RTEPD::Que_RenderProcess, proc, waitTick);
 
+    if(proc == nullptr || *proc == nullptr) return false;
     if(Result != pdPASS){
         delete *proc;
         *proc = nullptr;
@@ -300,16 +263,4 @@ bool RTEPD_API::addToQue(RenderProc** proc, TickType_t waitTick){
     }
 
     return true;
-}
-
-void RTEPD_API::gabageCollectionProccess(void* params){
-    while(true){
-        for(uint32_t i = 0; i < RTEPD_API::gabageCollection.size(); i++){
-            if(RTEPD_API::gabageCollection[i]->flag_processed){
-                free(RTEPD_API::gabageCollection[i]);
-            }
-        }
-
-        vTaskDelay(1);
-    }
 }

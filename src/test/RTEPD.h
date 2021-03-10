@@ -17,6 +17,13 @@
     }while(false);\
 }
 
+#define RTEPD_API_RETURN_PROC() {\
+    do{\
+        if(RTEPD_API::addToQue(&Proc, waitTick)) return Proc;\
+        else return nullptr;\
+    }while(false);\
+}
+
 enum class RenderCode{
     NONE,
     DRAW_FILL_RECT,
@@ -57,6 +64,7 @@ typedef struct _CanvasParams{
 
 typedef struct _RenderProc{
     bool flag_processed = false;
+    bool flag_procAutoRelease = true;
     RenderCode code = RenderCode::NONE;
     Vector2 pos = {0, 0};
     Size size = {0, 0};
@@ -87,31 +95,28 @@ namespace RTEPD{
 }
 
 namespace RTEPD_API{
-    RenderProc* drawFillRect(uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* drawRawImage(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* drawArea(uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* drawFillRect(uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* drawRawImage(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* drawArea(uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
 
-    RenderProc* canvasRegister(const char*, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasErase(const char*, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasIgnore(const char*, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasSetFill(const char*, uint16_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasDrawFill(const char*, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasSetRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasDrawRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasSetFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasDrawFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasSetText(const char*, uint16_t, uint16_t, uint8_t, char*, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasDrawText(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, char*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasSetReverse(const char*, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasDrawReverse(const char*, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasSetRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasDrawRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
-    RenderProc* canvasDraw(const char*, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY);
+    RenderProc* canvasRegister(const char*, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasErase(const char*, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasIgnore(const char*, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasSetFill(const char*, uint16_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasDrawFill(const char*, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasSetRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasDrawRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasSetFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasDrawFillRect(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasSetText(const char*, uint16_t, uint16_t, uint8_t, char*, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasDrawText(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, char*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasSetReverse(const char*, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasDrawReverse(const char*, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasSetRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasDrawRawImage(const char*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint8_t*, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
+    RenderProc* canvasDraw(const char*, uint16_t, uint16_t, m5epd_update_mode_t, TickType_t waitTick = portMAX_DELAY, bool procAutoRelease = true);
 
     bool addToQue(RenderProc**, TickType_t);
-    void gabageCollectionProccess(void* params);
-
-    static std::vector<RenderProc*> gabageCollection;
 }
 
 #endif

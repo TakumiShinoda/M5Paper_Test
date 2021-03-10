@@ -74,8 +74,8 @@ void RTEPD::renderProcess(void* params){
         }
         
         proc->flag_processed = true;
-        delete proc;
-        // vTaskDelay(1 * portTICK_PERIOD_MS);
+        
+        if(proc->flag_procAutoRelease) delete proc;
     }
 }
 
